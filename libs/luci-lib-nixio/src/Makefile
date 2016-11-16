@@ -2,11 +2,11 @@ OS            = Linux
 AXTLS_VERSION = 1.2.1
 AXTLS_DIR     = axTLS
 AXTLS_FILE    = $(AXTLS_DIR)-$(AXTLS_VERSION).tar.gz
-#NIXIO_TLS    ?= openssl
+NIXIO_TLS    ?= openssl
 NIXIO_SHADOW ?= $(shell echo 'int main(void){ return !getspnam("root"); }' | $(CC) $(CFLAGS) -include shadow.h -xc -o/dev/null - 2>/dev/null && echo yes)
 NIXIO_SO      = nixio.so
-NIXIO_LDFLAGS = -llua -lm -ldl
-CFLAGS       += -std=gnu99
+NIXIO_LDFLAGS = -L/koolshare/lib -llua -lm -ldl
+CFLAGS       += -fPIC -I/koolshare/include -std=gnu99
 
 ifeq (,$(findstring Darwin,$(OS)))
 	NIXIO_LDFLAGS += -lcrypt -shared
@@ -19,6 +19,7 @@ NIXIO_OBJ = nixio.o socket.o sockopt.o bind.o address.o \
 	    protoent.o poll.o io.o file.o splice.o process.o \
 	    syslog.o bit.o binary.o fs.o user.o \
 	    $(if $(NIXIO_TLS),tls-crypto.o tls-context.o tls-socket.o,)
+#$(error ${NIXIO_OBJ})
 
 ifeq ($(NIXIO_TLS),axtls)
 	TLS_CFLAGS = -IaxTLS/ssl -IaxTLS/crypto -IaxTLS/config -include axtls-compat.h
