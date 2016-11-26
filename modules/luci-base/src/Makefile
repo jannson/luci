@@ -1,3 +1,7 @@
+CFLAGS ?= -I/koolshare/include
+LDFLAGS ?= -L/koolshare/lib -llua
+FPIC ?= -fPIC
+
 %.o: %.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(FPIC) -c -o $@ $<
 
@@ -16,6 +20,6 @@ version.lua:
 compile: parser.so version.lua
 
 install: compile
-	mkdir -p $(DESTDIR)/usr/lib/lua/luci/template
-	cp parser.so $(DESTDIR)/usr/lib/lua/luci/template/parser.so
-	cp version.lua $(DESTDIR)/usr/lib/lua/luci/version.lua
+	mkdir -p $(DESTDIR)/koolshare/lib/lua/luci/template
+	cp parser.so $(DESTDIR)/koolshare/lib/lua/luci/template/parser.so
+	cp version.lua $(DESTDIR)/koolshare/lib/lua/luci/version.lua

@@ -1,5 +1,6 @@
-IP_CFLAGS = -std=gnu99 -I$(STAGING_DIR)/usr/include/libnl-tiny/
-IP_LDFLAGS = -llua -lm -lnl-tiny
+FPIC?=-fPIC
+IP_CFLAGS = $(FPIC) -std=gnu99 -I/koolshare/include -I/koolshare/include/libnl-tiny
+IP_LDFLAGS = -L/koolshare/lib -llua -lm -lnl-tiny
 IP_OBJ = ip.o
 IP_LIB = ip.so
 
@@ -10,8 +11,8 @@ compile: $(IP_OBJ)
 	$(CC) $(LDFLAGS) -shared -o $(IP_LIB) $(IP_OBJ) $(IP_LDFLAGS)
 
 install: compile
-	mkdir -p $(DESTDIR)/usr/lib/lua/luci
-	cp $(IP_LIB) $(DESTDIR)/usr/lib/lua/luci/$(IP_LIB)
+	mkdir -p $(DESTDIR)/koolshare/lib/lua/luci
+	cp $(IP_LIB) $(DESTDIR)/koolshare/lib/lua/luci/$(IP_LIB)
 
 clean:
 	rm -f *.o *.so
